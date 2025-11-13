@@ -2,6 +2,7 @@ import logging, sys
 
 from experiment_init import HarmonicOscillator
 from conduct_experiment import HarmonicOscillatorRunExperiment
+from visualize_results import Visualizer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,6 +25,8 @@ def main(experiment):
         time_ev_op = my_experiment_setup.get_time_evolution_operator()
         run_experiment = HarmonicOscillatorRunExperiment(psi0, time_ev_op, 100, my_experiment_setup.delta_t, my_experiment_setup.delta_x)
         data = run_experiment.time_evolve()
+        vis = Visualizer(data, my_experiment_setup.x0, "/Users/willaugustyn/QuantumSims/data/test.mp4")
+        vis.create_basic_animation_psi_x_real()
         
 if __name__ == '__main__':
     main("QHO")

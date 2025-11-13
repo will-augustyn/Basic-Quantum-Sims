@@ -177,11 +177,4 @@ def time_evolve_psi_x(psi, save, save_name):
         print("Animation saved")
         
         
-        ### switch to a function that computes all the data (saves to txt file or csv) and thne have one which I can use for visualization 
-        ## frame rate 
-        # playback speed (simulation seconds per real second) variable and a FPS variable 
-        
-# add a setting class, simulation class, plotting class 
-# using ffmpeg directly and 'writer' instance 
 
-#nano material stuff 

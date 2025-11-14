@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 from utils import normalize
 
-class HarmonicOscillatorRunExperiment:
+class RunExperiment:
     def __init__(self, psi0, time_evolution_operator, total_runtime, delta_t, delta_x, save_locally = False):
         self.psi0 = psi0
         self.time_ev_op = time_evolution_operator

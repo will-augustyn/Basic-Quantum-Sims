@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt 
 import pickle
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FuncAnimation
 import logging
 logger = logging.getLogger(__name__)
 
 class Visualizer:
-    def __init__(self, x0, save_path, fps=30, data_path=None, data=None):
+    def __init__(self, x0, save_path, fps=30, data_path=None, data=None, playback_speed = 1):
         """intitliazer the visualizer. Note: must pass in either a data_path or data. Can't leave both as None.
 
         Args:
@@ -20,6 +20,7 @@ class Visualizer:
         self.x0 = x0
         self.save_path = save_path
         self.fps = fps
+        self.playback_speed = playback_speed
         if data_path:
             with open(data_path, 'rb') as f:
                 self.data = pickle.load(f)
@@ -46,7 +47,7 @@ class Visualizer:
             line.set_data(self.x0, y)
             return (line,)
         
-        anim = FuncAnimation(fig, update, frames=total_time_steps, init_func=init)
+        anim = FuncAnimation(fig, update, frames=range(0, total_time_steps, self.playback_speed), init_func=init)
         anim.save(self.save_path, writer="ffmpeg", fps=self.fps)
         plt.close(fig)
         

@@ -27,13 +27,20 @@ class Visualizer:
         else:
             self.data = data
         
-    def create_basic_animation_psi_x_real(self):
+    def create_basic_animation_psi_x_real(self, include_potential=False, potential_array=None):
         fig, ax = plt.subplots()
         max_val = np.max(np.abs(np.real(self.data)))
-        ax.set_xlim(np.min(self.x0), np.max(self.x0))
-        ax.set_ylim(-1.1 * max_val, 1.1 * max_val)
+        if include_potential:
+            ax.set_xlim(np.min(self.x0), np.max(self.x0))
+            ax.set_ylim(0, 1.5*np.max(potential_array))
+        else:
+            ax.set_xlim(np.min(self.x0), np.max(self.x0))
+            ax.set_ylim(0, 1.1 * max_val)
         ax.set_xlabel("x")
         ax.set_ylabel("Re(ψ)")
+        
+        if include_potential:
+            ax.plot(self.x0, potential_array, color = "orange", label="V(x)")
         
         line, = ax.plot([], [], lw=2)
         total_time_steps = len(self.data)  
@@ -52,4 +59,38 @@ class Visualizer:
         plt.close(fig)
         
         logger.info(f"Created basic simulation of the real part of psi at {self.fps} fps")
+        return
+    
+    def create_basic_animation_probability_density(self, include_potential=False, potential_array=None):
+        fig, ax = plt.subplots()
+        max_val = np.max(np.abs(np.real(self.data)))
+        if include_potential:
+            ax.set_xlim(np.min(self.x0), np.max(self.x0))
+            ax.set_ylim(-1.1 * max_val, 1.5*np.max(potential_array))
+        else:
+            ax.set_xlim(np.min(self.x0), np.max(self.x0))
+            ax.set_ylim(-1.1 * max_val, 1.1 * max_val)
+        ax.set_xlabel("x")
+        ax.set_ylabel("$|\psi(x)|^2$")
+        
+        if include_potential:
+            ax.plot(self.x0, potential_array, color = "orange", label="V(x)")
+        
+        line, = ax.plot([], [], lw=2)
+        total_time_steps = len(self.data)  
+        
+        def init():
+            line.set_data([], [])
+            return (line,)
+        
+        def update(i):
+            y = np.real(np.abs(self.data[i])**2)
+            line.set_data(self.x0, y)
+            return (line,)
+        
+        anim = FuncAnimation(fig, update, frames=range(0, total_time_steps, self.playback_speed), init_func=init)
+        anim.save(self.save_path, writer="ffmpeg", fps=self.fps)
+        plt.close(fig)
+        
+        logger.info(f"Created basic simulation of psi sqaured at {self.fps} fps")
         return

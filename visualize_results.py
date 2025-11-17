@@ -32,10 +32,10 @@ class Visualizer:
         max_val = np.max(np.abs(np.real(self.data)))
         if include_potential:
             ax.set_xlim(np.min(self.x0), np.max(self.x0))
-            ax.set_ylim(0, 1.5*np.max(potential_array))
+            ax.set_ylim(-1.1*max_val, 1.5*np.max(potential_array))
         else:
             ax.set_xlim(np.min(self.x0), np.max(self.x0))
-            ax.set_ylim(0, 1.1 * max_val)
+            ax.set_ylim(-1.1*max_val, 1.1 * max_val)
         ax.set_xlabel("x")
         ax.set_ylabel("Re(ψ)")
         
